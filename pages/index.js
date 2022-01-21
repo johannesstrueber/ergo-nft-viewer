@@ -9,8 +9,8 @@ export default function Home() {
   const [infoData, setInfoData] = useState(null);
 
   const getInfoToken = useCallback(async () => {
-    let tokenId = searchQuery
-    const response = await fetch("https://api.ergoplatform.com/api/v1/boxes/byTokenId/" + tokenId)
+
+    const response = await fetch("https://api.ergoplatform.com/api/v1/boxes/byTokenId/" + searchQuery)
       .catch(e => console.log(e))
 
     if (response != undefined) {
@@ -51,10 +51,11 @@ export default function Home() {
 
   useEffect(() => {
     getInfoToken(searchQuery);
-    return () => {
-      getInfoToken(searchQuery);
-    }
+    // return () => {
+    //   getInfoToken(searchQuery);
+    // }
   }, [getInfoToken]);
+  console.log(searchQuery, "searchQuery")
 
 
   return (
@@ -62,10 +63,10 @@ export default function Home() {
       <Head>
         <title>Ergo NFT Viewer</title>
       </Head>
-      <div className='w-full justify-center items-center flex h-screen bg-[#fecaee] p-4 md:p-12 transition-all duration-300'>
+      <div className='w-full justify-center md:items-center flex min-h-screen bg-green-300 p-4 md:p-12 transition-all duration-300 select-none'>
         <div className='space-y-4'>
           <form
-            className='min-w-1/2 max-w-xl bg-white rounded-2xl items-center p-4 space-y-4 relative flex flex-wrap shadow-lg'
+            className='min-w-1/2 md:max-w-4xl bg-white rounded-2xl items-center p-4 space-y-4 relative flex flex-wrap shadow-lg'
             onSubmit={handleSubmit}
           >
             <label
@@ -77,10 +78,12 @@ export default function Home() {
               <input
                 type="text"
                 name="tokenId"
+                maxLength={64}
+                minLength={64}
                 id="tokenId"
                 required
                 placeholder='paste your ID here …'
-                className='w-full h-12 border rounded-lg px-4 text-center text-[13px]'
+                className='w-full h-12 border rounded-lg px-4 text-center text-[13px] overflow-scroll'
               />
             </div>
             <div className='w-full space-x-4 flex '>
@@ -93,7 +96,7 @@ export default function Home() {
             </div>
           </form>
 
-          <div className='min-w-1/2 max-w-xl bg-white rounded-2xl p-4 space-y-4 relative flex flex-wrap shadow-lg  justify-center'>
+          <div className='min-w-1/2 md:max-w-4xl bg-white rounded-2xl p-4 space-y-4 relative flex flex-wrap shadow-lg justify-center'>
             {infoData ? (
               <>
                 <h1>
@@ -112,13 +115,17 @@ export default function Home() {
                 </p>
               </>
             ) : (
-              <div className='text-center w-full'>
-                <h1>
-                  There seems to be no NFT with given ID <br />
-                  &quot;{searchQuery}&quot;<br />
-                  <span className="text-4xl">🥺</span>
-                </h1>
-              </div>
+              <>
+                <div className='w-full text-left'>
+                  There seems to be no NFT with given ID
+                </div>
+                <div className="overflow-scroll select-text text-center cursor-drag p-4 rounded-lg bg-gray-100 w-32 md:w-auto flex-grow shadow-inner text-[13px]">
+                  {searchQuery}
+                </div>
+                <div className='w-full text-6xl text-center '>
+                  🥺
+                </div>
+              </>
             )}
           </div>
         </div>
