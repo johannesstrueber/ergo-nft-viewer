@@ -62,6 +62,7 @@ export default function Home() {
     <>
       <Head>
         <title>Ergo NFT Viewer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
       <div className='w-full justify-center md:items-center flex min-h-screen bg-green-300 p-4 md:p-12 transition-all duration-300 select-none'>
         <div className='space-y-4'>
