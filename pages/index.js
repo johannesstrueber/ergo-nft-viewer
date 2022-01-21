@@ -1,12 +1,14 @@
 import Head from 'next/head'
 import { useEffect, useState, useCallback } from 'react'
 import Image from 'next/image'
+import { render } from 'react-dom';
 
 
 export default function Home() {
 
   const [searchQuery, setSearchQuery] = useState("f40de5cd87fbb077293382c1d9ed5b9197ce4fbc08776a32c383583470c40eef");
   const [infoData, setInfoData] = useState(null);
+  const [parsedObjData, setParsedObjData] = useState(null)
 
   const getInfoToken = useCallback(async () => {
 
@@ -22,6 +24,7 @@ export default function Home() {
       } else if (response.status === 200) {
         response = await response.json()
         setInfoData(response);
+        setParsedObjData(JSON.parse(toUtf8String(response.items[0].additionalRegisters.R5.renderedValue)));
       }
     } else {
       setInfoData(null);
@@ -46,16 +49,20 @@ export default function Home() {
   const handleSubmit = (e) => {
     e.preventDefault()
     //console.info(e.target[0].value, "handle submit");
-    setSearchQuery(e.target[0].value);
+    setSearchQuery(e.target[0].value)
+    setParsedObjData(undefined);
+    setInfoData(undefined);
   }
 
   useEffect(() => {
     getInfoToken(searchQuery);
-    return () => {
-      getInfoToken(null);
-    }
+    // return () => {
+    //   getInfoToken(null);
+    // }
   }, [getInfoToken]);
-  console.log(searchQuery, "searchQuery")
+
+  //console.log(infoData && infoData.items[0], "infoData")
+  console.log(parsedObjData && parsedObjData, "parsedObjData")
 
 
   return (
@@ -64,10 +71,10 @@ export default function Home() {
         <title>Ergo NFT Viewer</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
-      <div className='w-full justify-center md:items-center flex min-h-screen bg-green-300 p-4 md:p-12 transition-all duration-300 select-none'>
+      <div className='w-full justify-center md:items-center flex min-h-screen bg-gray-100 p-4 md:p-12 transition-all duration-300 select-none'>
         <div className='space-y-4'>
           <form
-            className='min-w-1/2 md:max-w-4xl bg-white rounded-2xl items-center p-4 space-y-4 relative flex flex-wrap shadow-lg'
+            className='min-w-1/2 md:max-w-3xl bg-white rounded-2xl items-center p-4 space-y-4 relative flex flex-wrap shadow-lg'
             onSubmit={handleSubmit}
           >
             <label
@@ -84,12 +91,12 @@ export default function Home() {
                 id="tokenId"
                 required
                 placeholder='paste your ID here …'
-                className='w-full h-12 border rounded-lg px-4 text-center text-[13px] overflow-scroll'
+                className='w-full h-12 border rounded-lg px-4 text-center text-[13px] overflow-scroll '
               />
             </div>
             <div className='w-full space-x-4 flex '>
               <button
-                className='w-full h-12 bg-blue-500 rounded-lg text-white'
+                className='w-full h-12 bg-blue-500 hover:bg-blue-400 transition-all rounded-lg text-white'
                 type="submit"
               >
                 search
@@ -97,10 +104,10 @@ export default function Home() {
             </div>
           </form>
 
-          <div className='min-w-1/2 md:max-w-4xl bg-white rounded-2xl p-4 space-y-4 relative flex flex-wrap shadow-lg justify-center'>
+          <div className='min-w-1/2 md:max-w-3xl bg-white rounded-2xl p-4 space-y-4 relative flex flex-wrap shadow-lg justify-center select-text'>
             {infoData ? (
               <>
-                <h1>
+                <h1 className='text-2xl py-4'>
                   {infoData.items[0].assets[0].name}
                 </h1>
                 <div className='w-full relative'>
@@ -110,9 +117,29 @@ export default function Home() {
                     width="100%" height="100%" layout="responsive" objectFit="contain"
                   />
                 </div>
-                <p>
-                  {toUtf8String(infoData.items[0].additionalRegisters.R5.renderedValue)}
-                </p>
+                {parsedObjData ? (
+                  <table class="table-auto w-full border-collapse border border-slate-400 bg-gray-50   rounded-lg">
+                    <thead className='bg-blue-500 text-base font-normal font-mono text-white p-4 text-left'>
+                      <tr>
+                        <th className='border border-slate-300 p-2 font-normal uppercase'>meta</th>
+                        <th className='border border-slate-300 p-2 font-normal uppercase'>content</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {parsedObjData && Object.keys(parsedObjData).map(key =>
+                        <tr>
+                          <td className='border border-slate-300 p-2'>{key}</td>
+                          <td className='border border-slate-300 p-2'>{parsedObjData[key]}</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                ) :
+                  (
+                    <p>
+                      {toUtf8String(infoData.items[0].additionalRegisters.R5.renderedValue)}
+                    </p>
+                  )}
               </>
             ) : (
               <>
