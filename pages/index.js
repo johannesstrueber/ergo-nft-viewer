@@ -118,7 +118,7 @@ export default function Home() {
                   />
                 </div>
                 {parsedObjData ? (
-                  <table class="table-auto w-full border-collapse border border-slate-400 bg-gray-50   rounded-lg">
+                  <table className="table-auto w-full border-collapse border border-slate-400 bg-gray-50   rounded-lg">
                     <thead className='bg-blue-500 text-base font-normal font-mono text-white p-4 text-left'>
                       <tr>
                         <th className='border border-slate-300 p-2 font-normal uppercase'>meta</th>
