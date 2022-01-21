@@ -51,9 +51,9 @@ export default function Home() {
 
   useEffect(() => {
     getInfoToken(searchQuery);
-    // return () => {
-    //   getInfoToken(searchQuery);
-    // }
+    return () => {
+      getInfoToken(null);
+    }
   }, [getInfoToken]);
   console.log(searchQuery, "searchQuery")
 
@@ -103,12 +103,11 @@ export default function Home() {
                 <h1>
                   {infoData.items[0].assets[0].name}
                 </h1>
-                <div className="h-[33.3vh] min-h-96 w-full relative">
+                <div className='w-full relative'>
                   <Image
                     className="rounded-lg bg-gray-200"
                     src={resolveIpfs(toUtf8String(infoData.items[0].additionalRegisters.R9.renderedValue))}
-                    layout="fill"
-                    objectFit="cover"
+                    width="100%" height="100%" layout="responsive" objectFit="contain"
                   />
                 </div>
                 <p>
