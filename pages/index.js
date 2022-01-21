@@ -5,11 +5,11 @@ import Image from 'next/image'
 
 export default function Home() {
 
-  const [query, setQuery] = useState("f40de5cd87fbb077293382c1d9ed5b9197ce4fbc08776a32c383583470c40eef");
+  const [searchQuery, setSearchQuery] = useState("f40de5cd87fbb077293382c1d9ed5b9197ce4fbc08776a32c383583470c40eef");
   const [infoData, setInfoData] = useState(null);
 
   const getInfoToken = useCallback(async () => {
-    let tokenId = query
+    let tokenId = searchQuery
     const response = await fetch("https://api.ergoplatform.com/api/v1/boxes/byTokenId/" + tokenId)
       .catch(e => console.log(e))
 
@@ -26,7 +26,7 @@ export default function Home() {
     } else {
       setInfoData(null);
     }
-  }, [query])
+  }, [searchQuery])
 
   const toUtf8String = (hex) => {
     if (!hex) { hex = '' }
@@ -46,13 +46,13 @@ export default function Home() {
   const handleSubmit = (e) => {
     e.preventDefault()
     //console.info(e.target[0].value, "handle submit");
-    setQuery(e.target[0].value);
+    setSearchQuery(e.target[0].value);
   }
 
   useEffect(() => {
-    getInfoToken(query);
+    getInfoToken(searchQuery);
     return () => {
-      getInfoToken(query);
+      getInfoToken(searchQuery);
     }
   }, [getInfoToken]);
 
@@ -114,7 +114,8 @@ export default function Home() {
             ) : (
               <div className='text-center w-full'>
                 <h1>
-                  There seems to be no NFT with given ID <br />"{query}"<br />
+                  There seems to be no NFT with given ID <br />
+                  &quot;{searchQuery}&quot;<br />
                   <span className="text-4xl">🥺</span>
                 </h1>
               </div>
