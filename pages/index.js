@@ -127,7 +127,7 @@ export default function Home() {
                     </thead>
                     <tbody>
                       {parsedObjData && Object.keys(parsedObjData).map(key =>
-                        <tr>
+                        <tr key={`metatable-${key}`}>
                           <td className='border border-slate-300 p-2'>{key}</td>
                           <td className='border border-slate-300 p-2'>{parsedObjData[key]}</td>
                         </tr>
