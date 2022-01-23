@@ -14,7 +14,7 @@ export default function Home() {
         <Search />
         <div className='w-full flex-grow md:max-w-3xl bg-white rounded-2xl p-4 space-y-4 relative flex flex-wrap shadow-lg justify-center select-text'>
           <Loader />
-          {infoData ? (
+          {infoData && infoData.items[0] ? (
             <NFTItemCard />
           ) : (
             <NoEntry />
