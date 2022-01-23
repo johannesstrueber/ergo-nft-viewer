@@ -10,4 +10,6 @@ export const useStore = create(set => ({
     parsedObjData: undefined,
     setParsedObjData: (input) => set(state => ({ parsedObjData: input })),
 
+    isLoading: true,
+    setIsLoading: (input) => set(state => ({ isLoading: input })),
 }))

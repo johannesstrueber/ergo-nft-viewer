@@ -9,6 +9,8 @@ export default function Search() {
     const setInfoData = useStore(state => state.setInfoData)
     const setParsedObjData = useStore(state => state.setParsedObjData)
 
+    const setIsLoading = useStore(state => state.setIsLoading)
+
     const handleSubmit = (e) => {
         e.preventDefault()
         setSearchQuery(e.target[0].value)
@@ -17,26 +19,35 @@ export default function Search() {
     }
 
     const getInfoToken = useCallback(async () => {
-        const response = await fetch("https://api.ergoplatform.com/api/v1/boxes/byTokenId/" + searchQuery)
-            .catch(e => console.log(e))
-        if (response != undefined) {
-            if (response.status >= 400 && response.status < 600) {
-                setInfoData(null);
-            } else if (response.status === 200) {
-                response = await response.json()
-                setInfoData(response);
-                setParsedObjData(JSON.parse(toUtf8String(response.items[0].additionalRegisters.R5.renderedValue)));
+        try {
+            setIsLoading(true)
+            let response = await fetch("https://api.ergoplatform.com/api/v1/boxes/byTokenId/" + searchQuery)
+            if (response != undefined) {
+                if (response.status >= 400 && response.status < 600) {
+                    setInfoData(undefined);
+                    setIsLoading(false);
+                } else if (response.status === 200) {
+                    response = await response.json()
+                    setInfoData(response);
+                    setIsLoading(false);
+                    try {
+                        setParsedObjData(JSON.parse(toUtf8String(response.items[0].additionalRegisters.R5.renderedValue)));
+                    } catch (e) {
+                        setParsedObjData(undefined);
+                    }
+                }
+            } else {
+                setInfoData(undefined);
+                setIsLoading(false)
             }
-        } else {
-            setInfoData(null);
+        }
+        catch (e) {
+            setIsLoading(false)
         }
     }, [searchQuery])
 
     useEffect(() => {
         getInfoToken(searchQuery);
-        // return () => {
-        //     getInfoToken(null);
-        // }
     }, [getInfoToken]);
 
 

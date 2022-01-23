@@ -10,37 +10,40 @@ export default function NFTItemCard() {
 
     return (
         <>
-            {infoData != 0 && (
+            {infoData && (
                 <>
                     <h1 className='text-2xl py-4'>
                         {infoData.items[0].assets[0].name}
                     </h1>
                     <NextImage image={resolveIpfs(toUtf8String(infoData.items[0].additionalRegisters.R9.renderedValue))} />
                     {parsedObjData ? (
-                        <table className="table-auto w-full border-collapse border border-slate-400 bg-gray-50 rounded-lg">
-                            <thead className='bg-blue-500 text-base font-normal font-mono text-white p-4 text-left'>
-                                <tr>
-                                    <th className='border border-slate-300 p-2 font-normal uppercase'>
-                                        meta
-                                    </th>
-                                    <th className='border border-slate-300 p-2 font-normal uppercase'>
-                                        content
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {parsedObjData && Object.keys(parsedObjData).map(key =>
-                                    <tr key={`metaTable-${key}`}>
-                                        <td className='border border-slate-300 p-2'>
-                                            {key}
-                                        </td>
-                                        <td className='border border-slate-300 p-2'>
-                                            {parsedObjData[key]}
-                                        </td>
+                        <div>
+                            <table className="table-auto w-full border-collapse border-b border-gray-100 ">
+                                <thead className='bg-blue-500 font-mono text-white text-left uppercase'>
+                                    <tr>
+                                        <th className='rounded-tl-lg p-3 font-normal'>
+                                            meta
+                                        </th>
+                                        <th className='rounded-tr-lg p-3 font-normal'>
+                                            content
+                                        </th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {parsedObjData && Object.keys(parsedObjData).map((key, i) =>
+                                        <tr key={`metaTable-${key}`} className={`${i & 1 ? "bg-white" : "bg-gray-100"} align-top`}>
+                                            <td className='border-x border-gray-100 p-3'>
+                                                {key}
+                                            </td>
+                                            <td className='border-x border-gray-100 p-3'>
+                                                {parsedObjData[key]}
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                            <div className="w-full h-10 bg-gray-100 rounded-b-lg" />
+                        </div>
                     ) :
                         (
                             <p>
@@ -48,7 +51,8 @@ export default function NFTItemCard() {
                             </p>
                         )}
                 </>
-            )}
+            )
+            }
         </>
     )
 }
