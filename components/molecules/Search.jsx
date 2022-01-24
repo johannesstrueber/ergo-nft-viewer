@@ -65,6 +65,7 @@ export default function Search() {
             <div className='w-full space-x-4 flex'>
                 <input
                     type="text"
+                    spellcheck="false"
                     name="tokenId"
                     maxLength={64}
                     minLength={64}

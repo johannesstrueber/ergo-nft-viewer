@@ -5,7 +5,7 @@ export default function Loader() {
     return (
         <>
             {isLoading &&
-                <div className="w-full flex-grow h-24 justify-center items-center cursor-wait text-center py-4 text-2xl ">
+                <div className="w-full md:w-screen relative flex-grow h-24 justify-center flex items-center cursor-wait text-center py-4 text-2xl ">
                     Loading…
                 </div>
             }
