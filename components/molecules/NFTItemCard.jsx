@@ -17,7 +17,7 @@ export default function NFTItemCard() {
             {parsedObjData ? (
                 <div>
                     <table className="table-auto w-full border-collapse border-b border-gray-100 ">
-                        <thead className='bg-blue-500 font-mono text-white text-left uppercase'>
+                        <thead className='bg-blue-500 text-white text-left uppercase'>
                             <tr>
                                 <th className='rounded-tl-lg p-3 font-normal'>
                                     meta
